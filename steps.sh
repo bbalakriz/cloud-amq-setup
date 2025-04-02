@@ -56,9 +56,10 @@ scp $LOCAL_SETUP_DIR/master1/etc/bootstrap.xml $REMOTE_USER@$REMOTE_HOST:$AMQ_DI
 scp $LOCAL_SETUP_DIR/slave1/etc/bootstrap.xml $REMOTE_USER@$REMOTE_HOST:$AMQ_DIR/slave1/etc/
 
 # Step 12: SSH back into the server to test Maven build and execution
-ssh $REMOTE_USER@$REMOTE_HOST "mvn clean compile exec:java"
+ssh $REMOTE_USER@$REMOTE_HOST "mvn clean compile exec:java -Dexec.mainClass="org.example.ArtemisPooledProducerEnhanced"
+ssh $REMOTE_USER@$REMOTE_HOST "mvn clean compile exec:java -Dexec.mainClass="org.example.ArtemisPooledConsumerEnhanced"
 
 # Step 13: Check for duplicates
-./artemis browser --url tcp://localhost:61617 --verbose --destination=new-queue --message-count 100000 --user xxxxxx --password xxxxxx > browsed.txt ; cat browsed.txt | grep browsing | awk '{print $5}' | sort | uniq -c | awk '$1 > 1 {print $2}'
+./artemis browser --url tcp://localhost:xxxxxx --verbose --destination=xxxxxxx --message-count 100000 --user xxxxxx --password xxxxxx > browsed.txt ; cat browsed.txt | grep browsing | awk '{print $5}' | sort | uniq -c | awk '$1 > 1 {print $2}'
 
 echo "AMQ Broker, Maven setup, and test execution completed successfully!"
